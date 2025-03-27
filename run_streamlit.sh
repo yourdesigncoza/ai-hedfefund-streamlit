@@ -2,7 +2,7 @@
 
 # Activate virtual environment if it exists
 if [ -d "venv" ]; then
-    source venv/bin/activate
+    source .venv/bin/activate
 fi
 
 # Install requirements if needed
