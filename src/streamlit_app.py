@@ -14,6 +14,11 @@ from llm.models import LLM_ORDER, get_model_info
 from main import run_hedge_fund
 from utils.stock_charts_fixed import get_stock_chart_with_indicators
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> ca6fbd476eccbaa418f106be12724b308fcb85e7
 def format_reasoning_as_markdown(reasoning: Any) -> str:
     """
     Convert reasoning data into a Markdown string, with each metric on its own line.
@@ -56,6 +61,92 @@ def format_reasoning_as_markdown(reasoning: Any) -> str:
     # 3) Return one big Markdown block
     return "  ".join(lines)
 
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+
+
+
+
+def format_reasoning_as_html(reasoning: Any) -> str:
+    """
+    Convert reasoning data into a bulleted HTML string.
+
+    This function handles both JSON strings and Python dictionaries from the 'reasoning' field
+    and converts them into a structured HTML format with categories and bullet points.
+    If the input is neither a valid JSON string nor a dictionary, it returns the input as-is.
+
+    Args:
+        reasoning: A string containing JSON-formatted reasoning details or a Python dictionary.
+
+    Returns:
+        A string containing the reasoning details formatted as HTML.
+    """
+    # Handle the case where reasoning is already a dictionary
+    data = None
+
+    if isinstance(reasoning, dict):
+        data = reasoning
+    else:
+        # Attempt to parse JSON if it's a string
+        try:
+            data = json.loads(reasoning) if isinstance(reasoning, str) else None
+        except (ValueError, TypeError):
+            # If not valid JSON, just return the raw input
+            return str(reasoning)
+
+    # If we couldn't get a dictionary, return the original input
+    if not isinstance(data, dict):
+        return str(reasoning)
+
+    # Build HTML output
+    html_blocks = []
+    for key, val in data.items():
+        # Example: key = "profitability_signal"
+        category = key.replace("_signal", "").replace("_", " ").title()
+        # Example: "profitability_signal" -> "Profitability"
+
+        # Handle both string values and nested dictionaries
+        if isinstance(val, dict):
+            signal_type = val.get('signal', '').title()
+            # Example: "bullish" -> "Bullish"
+            details_str = val.get('details', '')
+            # Example: "ROE: 145.30%, Net Margin: 24.30%..."
+
+            # Convert the details to a bullet list
+            detail_items_html = ""
+            for detail_item in details_str.split(","):
+                detail_items_html += f"<li>{detail_item.strip()}</li>"
+
+            # One section per signal
+            html_block = f"""
+            <p><strong>{category}</strong> ({signal_type})</p>
+            <ul>
+                {detail_items_html}
+            </ul>
+            """
+        else:
+            # Handle simple string values
+            html_block = f"""
+            <p><strong>{category}</strong></p>
+            <ul>
+                <li>{val}</li>
+            </ul>
+            """
+
+        html_blocks.append(html_block)
+
+    # Join everything into one HTML string
+    return "".join(html_blocks)
+
+
+
+>>>>>>> ca6fbd476eccbaa418f106be12724b308fcb85e7
 # Set page configuration
 st.set_page_config(
     page_title="InvestAI Analyst Platform",
@@ -492,7 +583,11 @@ with main_tabs[0]:
                             {
                                 "Agent": agent_name,
                                 "Signal": styled_signal,
+<<<<<<< HEAD
                                 "Confidence": f"{confidence:.1f}%",
+=======
+                                "Confidence": f"{confidence}%",
+>>>>>>> ca6fbd476eccbaa418f106be12724b308fcb85e7
                                 "Reasoning": md_text  # Just store the markdown text, not st.markdown(md_text)
                             }
                         )
