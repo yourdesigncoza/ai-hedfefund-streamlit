@@ -1,0 +1,1 @@
+python src/backtester.py --tickers AAPL --start-date 2024-01-01 --end-date 2024-03-01 --initial-capital 100000
